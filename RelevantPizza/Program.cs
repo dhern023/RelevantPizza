@@ -20,7 +20,7 @@ namespace RelevantPizza
                 try
                 {
                     var context = services.GetRequiredService<PizzaContext>();
-                    context.Database.EnsureCreated();
+                    DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
                 {
