@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RelevantPizza.Models
 {
@@ -21,10 +19,10 @@ namespace RelevantPizza.Models
         [Required]
         public OrderType OrderType { get; set; }
         public Employee Driver { get; set; }
-        public DateTime? DriverOut { get; set; }
-        public DateTime? DriverIn { get; set; }
+        public DateTime DriverOut { get; set; }
+        public DateTime DriverIn { get; set; }
 
         [Required]
-        IEnumerable<OrderItem> OrderItems { get; set; }
+        public IEnumerable<OrderItem> OrderItems { get; set; }
     }
 }
