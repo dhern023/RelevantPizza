@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RelevantPizza.Data;
 using RelevantPizza.Models;
+using RelevantPizza.ViewModels;
 
 namespace RelevantPizza.Controllers
 {
@@ -46,23 +47,31 @@ namespace RelevantPizza.Controllers
         // GET: OrderItems/Create
         public IActionResult Create()
         {
+            OrderItemAddViewModel vm = new OrderItemAddViewModel();
+            vm.InventoryList = new List<SelectListItem>();
             return View();
         }
 
-        // POST: OrderItems/Create
+        // POST: OrderItems/GetInventoryItems
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Type,Price")] OrderItem orderItem)
+        public async Task<IActionResult> GetInventoryItems([Bind("InventoryItemType")] OrderItemAddViewModel orderItemVM)
         {
-            if (ModelState.IsValid)
+            List<InventoryItem> InventoryItems = _context.InventoryItems.Where(i => i.Type == orderItemVM.InventoryItemType).ToList();
+            var InventoryItemsList = new List<SelectListItem>();
+
+            foreach (InventoryItem item in InventoryItems)
             {
-                _context.Add(orderItem);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                SelectListItem sli = new SelectListItem();
+                sli.Text = item.Name;
+                sli.Value = item.ID.ToString();
+                InventoryItemsList.Add(sli);
             }
-            return View(orderItem);
+
+            orderItemVM.InventoryList = InventoryItemsList;
+            return View(orderItemVM);
         }
 
         // GET: OrderItems/Edit/5
