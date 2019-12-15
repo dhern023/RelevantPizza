@@ -10,7 +10,7 @@ using RelevantPizza.Data;
 namespace RelevantPizza.Migrations
 {
     [DbContext(typeof(PizzaContext))]
-    [Migration("20191206192223_InitialCreate")]
+    [Migration("20191215030338_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,6 +81,35 @@ namespace RelevantPizza.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("RelevantPizza.Models.InventoryItem", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("OrderItemID")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PricePerUnit")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("QuantityRemaining")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("OrderItemID");
+
+                    b.ToTable("InventoryItems");
+                });
+
             modelBuilder.Entity("RelevantPizza.Models.Order", b =>
                 {
                     b.Property<int>("ID")
@@ -88,7 +117,7 @@ namespace RelevantPizza.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CustomerID")
+                    b.Property<int>("CustomerID")
                         .HasColumnType("int");
 
                     b.Property<int?>("DriverID")
@@ -119,6 +148,9 @@ namespace RelevantPizza.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("OrderID")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -127,33 +159,36 @@ namespace RelevantPizza.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("OrderID");
+
                     b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("RelevantPizza.Models.OrderItemDetail", b =>
+            modelBuilder.Entity("RelevantPizza.Models.InventoryItem", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("OrderItemDetails");
+                    b.HasOne("RelevantPizza.Models.OrderItem", null)
+                        .WithMany("OrderItemDetails")
+                        .HasForeignKey("OrderItemID");
                 });
 
             modelBuilder.Entity("RelevantPizza.Models.Order", b =>
                 {
                     b.HasOne("RelevantPizza.Models.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerID");
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("RelevantPizza.Models.Employee", "Driver")
                         .WithMany()
                         .HasForeignKey("DriverID");
+                });
+
+            modelBuilder.Entity("RelevantPizza.Models.OrderItem", b =>
+                {
+                    b.HasOne("RelevantPizza.Models.Order", null)
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderID");
                 });
 #pragma warning restore 612, 618
         }

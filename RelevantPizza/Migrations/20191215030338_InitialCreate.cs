@@ -44,39 +44,12 @@ namespace RelevantPizza.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItemDetails",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderItemDetails", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderItems",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<int>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderItems", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerID = table.Column<int>(nullable: true),
+                    CustomerID = table.Column<int>(nullable: false),
                     OrderType = table.Column<int>(nullable: false),
                     DriverID = table.Column<int>(nullable: true),
                     DriverOut = table.Column<DateTime>(nullable: false),
@@ -90,7 +63,7 @@ namespace RelevantPizza.Migrations
                         column: x => x.CustomerID,
                         principalTable: "Customers",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Orders_Employees_DriverID",
                         column: x => x.DriverID,
@@ -98,6 +71,60 @@ namespace RelevantPizza.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<int>(nullable: false),
+                    Price = table.Column<decimal>(nullable: false),
+                    OrderID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderID",
+                        column: x => x.OrderID,
+                        principalTable: "Orders",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InventoryItems",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Type = table.Column<int>(nullable: false),
+                    QuantityRemaining = table.Column<int>(nullable: false),
+                    PricePerUnit = table.Column<decimal>(nullable: false),
+                    OrderItemID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryItems", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_InventoryItems_OrderItems_OrderItemID",
+                        column: x => x.OrderItemID,
+                        principalTable: "OrderItems",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItems_OrderItemID",
+                table: "InventoryItems",
+                column: "OrderItemID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderID",
+                table: "OrderItems",
+                column: "OrderID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_CustomerID",
@@ -113,7 +140,7 @@ namespace RelevantPizza.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "OrderItemDetails");
+                name: "InventoryItems");
 
             migrationBuilder.DropTable(
                 name: "OrderItems");

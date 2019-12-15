@@ -89,6 +89,9 @@ namespace RelevantPizza.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("OrderItemID")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("PricePerUnit")
                         .HasColumnType("decimal(18,2)");
 
@@ -100,6 +103,8 @@ namespace RelevantPizza.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("OrderItemID");
+
                     b.ToTable("InventoryItems");
                 });
 
@@ -110,7 +115,7 @@ namespace RelevantPizza.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CustomerID")
+                    b.Property<int>("CustomerID")
                         .HasColumnType("int");
 
                     b.Property<int?>("DriverID")
@@ -141,6 +146,9 @@ namespace RelevantPizza.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("OrderID")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -149,18 +157,36 @@ namespace RelevantPizza.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("OrderID");
+
                     b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("RelevantPizza.Models.InventoryItem", b =>
+                {
+                    b.HasOne("RelevantPizza.Models.OrderItem", null)
+                        .WithMany("OrderItemDetails")
+                        .HasForeignKey("OrderItemID");
                 });
 
             modelBuilder.Entity("RelevantPizza.Models.Order", b =>
                 {
                     b.HasOne("RelevantPizza.Models.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerID");
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("RelevantPizza.Models.Employee", "Driver")
                         .WithMany()
                         .HasForeignKey("DriverID");
+                });
+
+            modelBuilder.Entity("RelevantPizza.Models.OrderItem", b =>
+                {
+                    b.HasOne("RelevantPizza.Models.Order", null)
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderID");
                 });
 #pragma warning restore 612, 618
         }

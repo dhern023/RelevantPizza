@@ -12,7 +12,6 @@ namespace RelevantPizza.ViewModels
     public class OrderAddViewModel
     {
         public int OrderID { get; set; }
-
         public int CustomerID { get; set; }
         public OrderType OrderType { get; set; }
         public IEnumerable<OrderItem> OrderItems { get; set; }

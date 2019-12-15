@@ -14,28 +14,29 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
-                @Html.DropDownList("ItemTypes", Html.GetEnumSelectList(typeof(OrderItemType)),
+                @Html.DropDownList("Type", Html.GetEnumSelectList(typeof(OrderItemType)),
                "Select Type",
                new { @class = "form-control" })
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
-                @Html.DropDownList("ItemTypes", Html.GetEnumSelectList(typeof(InventoryItemType)),
+                <label asp-for="InventoryItemType" class="control-label"></label>
+                @Html.DropDownList("Type", Html.GetEnumSelectList(typeof(InventoryItemType)),
                "Select Type",
                new { @class = "form-control" })
-                <span asp-validation-for="Type" class="text-danger"></span>
+                <span asp-validation-for="InventoryItemType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
-                @Html.DropDownList("InventoryItem", Model.InventoryList,
-               "Select Type",
-               new { @class = "form-control" })
-                <span asp-validation-for="Type" class="text-danger"></span>
+                <label asp-for="InventoryID" class="control-label"></label>
+                <select class="form-control" asp-for="InventoryID" asp-items="Model.InventoryList"></select>
+                <span asp-validation-for="InventoryID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add @Model.InventoryItemType" class="btn btn-secondary" asp-action="AddInventoryItemToOrderItem" />
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <label asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
