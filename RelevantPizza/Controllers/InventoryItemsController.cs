@@ -59,7 +59,7 @@ namespace RelevantPizza.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(inventoryItem);
-                await _context.SaveChangesAsync();.
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(inventoryItem);

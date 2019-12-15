@@ -47,7 +47,9 @@ namespace RelevantPizza.Controllers
         // GET: OrderItems/Create
         public IActionResult Create()
         {
-            return View();
+            OrderItemAddViewModel vm = new OrderItemAddViewModel();
+            vm.InventoryList = new List<SelectListItem>();
+            return View(vm);
         }
 
         // POST: OrderItems/Create
