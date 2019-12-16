@@ -21,14 +21,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="InventoryItemType" class="control-label"></label>
-                @Html.DropDownList("Type", Html.GetEnumSelectList(typeof(InventoryItemType)),
+                @Html.DropDownListFor(i => i.InventoryItemType, Html.GetEnumSelectList(typeof(InventoryItemType)),
                "Select Type",
-               new { @class = "form-control" })
+               new {
+                   @class = "form-control",
+                   @onchange = "var form = document.forms[0]; form.action = 'GetInventoryItems'; form.submit();",
+               })
                 <span asp-validation-for="InventoryItemType" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="InventoryID" class="control-label"></label>
-                <select class="form-control" asp-for="InventoryID" asp-items="Model.InventoryList"></select>
+                <select class="form-control" asp-for="InventoryID" asp-items="Model?.InventoryList"></select>
                 <span asp-validation-for="InventoryID" class="text-danger"></span>
             </div>
             <div class="form-group">

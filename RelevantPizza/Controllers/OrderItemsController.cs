@@ -73,7 +73,7 @@ namespace RelevantPizza.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult GetInventoryItems([Bind("InventoryItemType")] OrderItemAddViewModel orderItemVM)
+        public IActionResult GetInventoryItems([Bind("InventoryItemType,InventoryID")] OrderItemAddViewModel orderItemVM)
         {
             List<InventoryItem> inventoryItems = _context.InventoryItems.Where(i => i.Type == orderItemVM.InventoryItemType).ToList();
             var InventoryItemsList = new List<SelectListItem>();
@@ -90,23 +90,12 @@ namespace RelevantPizza.Controllers
             return View("Create", orderItemVM);
         }
 
-        /*public IActionResult AddInventoryItemToOrderItem([Bind("InventoryItemType")] OrderItemAddViewModel orderItemVM)
+        public IActionResult AddInventoryItemToOrderItem([Bind("InventoryItemType")] OrderItemAddViewModel orderItemVM)
         {
-            orderItemVM.InventoryItems
-            List<InventoryItem> InventoryItems = _context.InventoryItems.Where(i => i.Type == orderItemVM.InventoryItemType).ToList();
-            var InventoryItemsList = new List<SelectListItem>();
+            orderItemVM.OrderItemDetails.Add(_context.InventoryItems.FirstOrDefault(i => i.ID == orderItemVM.InventoryID));
 
-            foreach (InventoryItem item in InventoryItems)
-            {
-                SelectListItem sli = new SelectListItem();
-                sli.Text = item.Name;
-                sli.Value = item.ID.ToString();
-                InventoryItemsList.Add(sli);
-            }
-
-            orderItemVM.InventoryList = InventoryItemsList;
             return View("Create", orderItemVM);
-        }*/
+        }
 
         // GET: OrderItems/Edit/5
         public async Task<IActionResult> Edit(int? id)
