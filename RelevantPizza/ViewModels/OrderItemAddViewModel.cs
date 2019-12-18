@@ -15,5 +15,11 @@ namespace RelevantPizza.ViewModels
         public InventoryItemType InventoryItemType { get; set; }
         public List<InventoryItem> OrderItemDetails { get; set; }
         public IEnumerable<SelectListItem> InventoryList { get; set; }
+
+        public OrderItemAddViewModel()
+        {
+            OrderItemDetails = new List<InventoryItem>();
+            InventoryList = new List<SelectListItem>();
+        }
     }
 }

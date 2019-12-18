@@ -47,9 +47,7 @@ namespace RelevantPizza.Controllers
         // GET: OrderItems/Create
         public IActionResult Create()
         {
-            OrderItemAddViewModel vm = new OrderItemAddViewModel();
-            vm.InventoryList = new List<SelectListItem>();
-            return View(vm);
+            return View();
         }
 
         // POST: OrderItems/Create
@@ -77,14 +75,6 @@ namespace RelevantPizza.Controllers
         {
             List<InventoryItem> inventoryItems = _context.InventoryItems.Where(i => i.Type == orderItemVM.InventoryItemType).ToList();
             var InventoryItemsList = new List<SelectListItem>();
-
-            foreach (InventoryItem item in inventoryItems)
-            {
-                SelectListItem sli = new SelectListItem();
-                sli.Text = item.Name;
-                sli.Value = item.ID.ToString();
-                InventoryItemsList.Add(sli);
-            }
 
             orderItemVM.InventoryList = InventoryItemsList;
             return View("Create", orderItemVM);

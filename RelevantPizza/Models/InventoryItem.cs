@@ -7,12 +7,12 @@ namespace RelevantPizza.Models
 {
     public enum InventoryItemType
     {
-        Flavor,
-        Size,
-        Topping,
-        Sauce,
-        Cheese,
-        Dough
+        Flavor = 1,
+        Size = 2,
+        Topping = 3,
+        Sauce = 4,
+        Cheese = 5,
+        Dough= 6
     }
     public class InventoryItem
     {
